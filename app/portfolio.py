@@ -43,6 +43,9 @@ class Portfolio:
         """
         try:
             self._df = pd.read_sql_query("SELECT * from ticker_values", self.conn)
+            self._df.drop(columns=['id'], inplace=True)
+            self._df = self._df.pivot_table(index=['value_date'], columns=['ticker'], values=['ticker_value']).copy()
+            self._df.columns = self._df.columns.droplevel()
             return True
         except Exception as ex:
             print(ex)
